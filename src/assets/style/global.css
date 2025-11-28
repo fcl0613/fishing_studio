@@ -1,0 +1,33 @@
+html, body, #app {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+.el-cascader-panel {
+    height: 300px;
+}
+
+/* 全局修改 Element UI Table 滚动条样式 */
+.el-table__body-wrapper::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.el-table__body-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 2px;
+}
+
+.el-table__body-wrapper::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.el-table__body-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+.el-table__body-wrapper::-webkit-scrollbar-corner {
+  background: #f1f1f1;
+}
