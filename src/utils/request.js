@@ -65,9 +65,15 @@ service.interceptors.response.use(
   (error) => {
     console.log('err' + error) // for debug
     Message({
-      message: error.message,
+      message: '网络异常，请稍后重试',
       type: 'error',
-      duration: 5 * 1000,
+      duration: 3 * 1000,
+      onClose: () => {
+        store.dispatch('delToken')
+        if(window.location.hash !== '#/login') {
+          window.location.reload()
+        }
+      }
     })
     return Promise.reject(error)
   }

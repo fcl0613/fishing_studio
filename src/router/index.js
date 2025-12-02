@@ -30,7 +30,11 @@ const router = new VueRouter({
         {
           path: 'product/:id',
           component: () => import('@/pages/product/index.vue'),
-        }
+        },
+        {
+          path: 'cart',
+          component: () => import('@/pages/cart/index.vue'),
+        },
       ],
     },
     {

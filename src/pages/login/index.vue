@@ -124,7 +124,7 @@ export default {
             this.$message.success('登录成功')
             this.$router.push('/layout')
           } catch (error) {
-            this.$message.error('登录失败，请检查用户名或密码')
+            // this.$message.error('登录失败，请检查用户名或密码')
             this.loginLoading = false
           }
         }
