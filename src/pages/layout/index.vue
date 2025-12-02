@@ -33,24 +33,24 @@
           商城首页
         </span>
         <span :class="{ active: activeCategory === 'all' }" @click="changeCategory('all', 0)"> 全部商品 </span>
-        <span
+        <!-- <span
           v-for="item in categoryList"
           :key="item.id"
           :class="{ active: activeCategory === item.categoryName }"
           @click="changeCategory(item.categoryName, item.id)"
         >
           {{ item.categoryName }}
-        </span>
+        </span> -->
         <!-- <span :class="{ active: activeCategory === 'platform' }" @click="changeCategory('platform')"> 台钓 </span> -->
-        <span :class="{ active: activeCategory === 'brand' }" @click="changeCategory('brand', 0)"> 品牌 </span>
+        <!-- <span :class="{ active: activeCategory === 'brand' }" @click="changeCategory('brand', 0)"> 品牌 </span> -->
       </div>
     </div>
 
     <!-- 主内容区 -->
-    <div style="background-color: #f5f5f5;">
+    <div style="background-color: #f5f5f5">
       <div class="main-content">
-      <router-view></router-view>
-    </div>
+        <router-view></router-view>
+      </div>
     </div>
 
     <footer class="footer">
@@ -66,6 +66,7 @@
 
 <script>
 import frontAPI from '@/api/front'
+import { EventBus } from '@/utils/event-bus'
 export default {
   data() {
     return {
@@ -74,36 +75,70 @@ export default {
       categoryList: [],
     }
   },
+  mounted() {
+    // 监听搜索事件
+    EventBus.$on('clearSearchText', () => {
+      this.searchText = ''
+    })
+  },
   created() {
     // 初始化用户信息
     this.$store.dispatch('getUserInfo')
     this.initCategory()
+    this.initActiveCategory()
   },
   methods: {
+    initActiveCategory() {
+      if (this.$route.path === '/layout/home') {
+        this.activeCategory = 'homePage'
+      } else if (this.$route.path === '/layout/search') {
+        this.activeCategory = 'all'
+      } else {
+        this.activeCategory = 'homePage'
+      }
+    },
     handleSearch() {
       if (this.searchText) {
+        if (this.$route.path === '/layout/search') {
+          EventBus.$emit('search', this.searchText)
+          return
+        }
         this.$router.push({
           path: '/layout/search',
-          query: { keyword: this.searchText },
+          query: { productName: this.searchText, timestamp: new Date().getTime() },
         })
+        this.activeCategory = 'all'
       }
     },
     changeCategory(category, categoryId) {
       this.activeCategory = category
-
+      this.searchText = ''
       if (category === 'homePage') {
         if (this.$route.path !== '/layout/home') {
-          this.$router.push({ path: '/layout/home' }, () => {})
+          this.$router.push({ path: '/layout/home' })
+          return
         } else {
           return
         }
       }
       if (category === 'all') {
         // TODO 路由跳转到商品搜索页面 参数 catq=all catId=0
+        this.$router.push({
+          path: '/layout/search',
+          query: { catq: 'all', catId: 0 },
+        })
       } else if (category === 'brand') {
         // TODO 路由跳转到商品搜索页面 参数 catq=brand catId=0
+        this.$router.push({
+          path: '/layout/search',
+          query: { catq: 'brand', catId: 0 },
+        })
       } else {
         // TODO 路由跳转到商品搜索页面 参数 catq=ot catId=父级分类id
+        this.$router.push({
+          path: '/layout/search',
+          query: { catq: 'ot', catId: categoryId },
+        })
       }
     },
     async initCategory() {
@@ -111,6 +146,9 @@ export default {
       this.categoryList = res.data
     },
   },
+  beforeDestroy() {
+    EventBus.$off('clearSearchText')
+  }
 }
 </script>
 
@@ -118,7 +156,6 @@ export default {
 .layout-container {
   width: 100%;
   min-width: 1200px;
-  
 }
 
 // 顶部用户栏样式
