@@ -27,7 +27,15 @@ const router = new VueRouter({
           path: 'search',
           component: () => import('@/pages/search/index.vue'),
         },
+        {
+          path: 'product/:id',
+          component: () => import('@/pages/product/index.vue'),
+        }
       ],
+    },
+    {
+      path: '/404',
+      component: () => import('@/pages/404/index.vue'),
     },
   ],
 })

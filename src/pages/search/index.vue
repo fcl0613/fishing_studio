@@ -52,7 +52,7 @@
     </div>
     <div class="page-box">
       <el-pagination
-      :hide-on-single-page="true"
+        :hide-on-single-page="true"
         :small="true"
         :current-page.sync="queryForm.page"
         :page-sizes="[10, 20, 50, 100]"
@@ -212,6 +212,9 @@ export default {
     },
     handleProductClick(product) {
       console.log(product)
+      this.$router.push({
+        path: '/layout/product/' + product.id,
+      })
     },
     handleSizeChange(val) {
       this.queryForm.size = val

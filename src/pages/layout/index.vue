@@ -94,7 +94,7 @@ export default {
       } else if (this.$route.path === '/layout/search') {
         this.activeCategory = 'all'
       } else {
-        this.activeCategory = 'homePage'
+        this.activeCategory = ''
       }
     },
     handleSearch() {

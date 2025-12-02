@@ -13,9 +13,9 @@
     <div class="product-section">
       <h2 class="section-title">精品推荐</h2>
       <div class="product-grid">
-        <product-card 
-          v-for="product in recommendProducts" 
-          :key="product.id" 
+        <product-card
+          v-for="product in recommendProducts"
+          :key="product.id"
           :product="product"
           @click="handleProductClick"
         />
@@ -26,9 +26,9 @@
     <div class="product-section">
       <h2 class="section-title">最新上架</h2>
       <div class="product-grid">
-        <product-card 
-          v-for="product in newProducts" 
-          :key="product.id" 
+        <product-card
+          v-for="product in newProducts"
+          :key="product.id"
           :product="product"
           @click="handleProductClick(product)"
         />
@@ -45,7 +45,7 @@ import ProductCard from '@/components/productCard/index.vue'
 export default {
   components: {
     // 注册组件
-    ProductCard
+    ProductCard,
   },
   data() {
     return {
@@ -54,7 +54,7 @@ export default {
       // 推荐商品数据
       recommendProducts: [],
       imgPreStuff: '',
-      newProducts: []
+      newProducts: [],
     }
   },
   created() {
@@ -85,8 +85,10 @@ export default {
       }
     },
     handleProductClick(product) {
-
-    }
+      this.$router.push({
+        path: '/layout/product/' + product.id,
+      })
+    },
   },
 }
 </script>
@@ -132,6 +134,5 @@ export default {
     grid-template-columns: repeat(4, 1fr);
     gap: 30px; // 增加间距
   }
-
 }
 </style>
