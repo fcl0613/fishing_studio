@@ -28,4 +28,11 @@ export default {
       data: dto,
     })
   },
+  batchRemove(dto) {
+    return request({
+      url: '/cart/btremove',
+      method: 'post',
+      data: dto,
+    })
+  },
 }
