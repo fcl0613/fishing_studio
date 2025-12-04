@@ -133,6 +133,7 @@
 
 <script>
 import productApi from '@/api/product'
+import cartApi from '@/api/cart'
 export default {
   data() {
     return {
@@ -250,7 +251,7 @@ export default {
       const orderInfo = {
         product: this.product,
         quantity: this.quantity,
-        selectedSku: this.product.skuList[this.selectedSkuIndex], // 修改为skuList
+        selectedSku: this.product.skuList[this.selectedSkuIndex],
       }
       console.log('立即购买:', orderInfo)
       this.$message.success('即将跳转到订单确认页面')
@@ -263,12 +264,18 @@ export default {
       }
 
       const cartItem = {
-        product: this.product,
-        quantity: this.quantity,
-        selectedSku: this.product.skuList[this.selectedSkuIndex], // 修改为skuList
+        productId: this.product.id,
+        productCount: this.quantity,
+        skuId: this.product.skuList[this.selectedSkuIndex].id,
       }
       console.log('加入购物车:', cartItem)
-      this.$message.success('成功加入购物车')
+      cartApi.create(cartItem).then((res) => {
+        if (res.code === 0) {
+          this.$message.success('成功加入购物车')
+        } else {
+          this.$message.error(res.msg || '加入购物车失败')
+        }
+      })
     },
   },
   watch: {
