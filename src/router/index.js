@@ -48,6 +48,10 @@ const router = new VueRouter({
               path: 'updatepsd',
               component: () => import('@/pages/updatepsd/index.vue'),
             },
+            {
+              path: 'address',
+              component: () => import('@/pages/address/index.vue'),
+            },
           ],
         },
       ],

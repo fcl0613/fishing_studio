@@ -30,6 +30,10 @@ export default {
             index: '/layout/personal/updatepsd',
             title: '修改密码'
           },
+          {
+            index: '/layout/personal/address',
+            title: '我的地址'
+          },
         ]
     }
   },
