@@ -2,9 +2,9 @@
   <div class="container">
     <div class="personal-box">
       <div class="menu-box">
-        <el-menu default-active="2" >
-          <el-menu-item index="2">
-            <span slot="title">个人中心</span>
+        <el-menu :default-active="activeIndex" router>
+          <el-menu-item v-for="item in menuList" :key="item.index" :index="item.index">
+            <span slot="title">{{item.title}}</span>
           </el-menu-item>
           
         </el-menu>
@@ -20,12 +20,28 @@
 export default {
   data() {
     return {
+        activeIndex: '',
         menuList:[
-
+          {
+            index: '/layout/personal/info',
+            title: '个人中心'
+          },
+          {
+            index: '/layout/personal/updatepsd',
+            title: '修改密码'
+          },
         ]
     }
   },
-  created() {},
+  watch: {
+    $route(to, from) {
+      console.log(to.path)
+      this.activeIndex = to.path
+    }
+  },
+  created() {
+      this.activeIndex = this.$route.path
+  },
   methods: {},
 }
 </script>

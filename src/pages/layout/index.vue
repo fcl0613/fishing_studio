@@ -6,7 +6,7 @@
         <span v-if="!$store.getters.getToken" @click="$router.push('/login')">你好，请登录</span>
         <span v-if="!$store.getters.getToken" class="separator">|</span>
         <span v-if="!$store.getters.getToken" @click="$router.push('/login')">欢迎注册</span>
-        <span v-if="$store.getters.getToken" @click="$router.push('/layout/user')">会员中心</span>
+        <span v-if="$store.getters.getToken" @click="$router.push('/layout/personal')">会员中心</span>
         <span v-if="$store.getters.getToken" class="separator">|</span>
         <span v-if="$store.getters.getToken" @click="$router.push('/layout/message')">我的消息</span>
       </div>
