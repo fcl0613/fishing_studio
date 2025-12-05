@@ -71,9 +71,20 @@ export default {
   data() {
     return {
       searchText: '',
-      activeCategory: 'homePage', // 当前激活的分类
+      activeCategory: '', // 当前激活的分类
       categoryList: [],
     }
+  },
+  watch: {
+    $route(to, _from) {
+      if (to.path === '/layout/home') {
+        this.activeCategory = 'homePage'
+      } else if (to.path === '/layout/search') {
+        this.activeCategory = 'all'
+      } else {
+        this.activeCategory = ''
+      }
+    },
   },
   mounted() {
     // 监听搜索事件
@@ -148,7 +159,7 @@ export default {
   },
   beforeDestroy() {
     EventBus.$off('clearSearchText')
-  }
+  },
 }
 </script>
 

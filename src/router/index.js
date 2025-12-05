@@ -35,6 +35,17 @@ const router = new VueRouter({
           path: 'cart',
           component: () => import('@/pages/cart/index.vue'),
         },
+        {
+          path: 'personal',
+          component: () => import('@/pages/personal/index.vue'),
+          redirect: '/layout/personal/info',
+          children: [
+            {
+              path: 'info',
+              component: () => import('@/pages/userinfo/index.vue'),
+            },
+          ],
+        },
       ],
     },
     {
