@@ -1,5 +1,7 @@
 <template>
   <div class="product-detail-page" v-loading="loading">
+    <el-page-header style="margin-bottom: 20px;" @back="goBack">
+</el-page-header>
     <!-- 商品信息部分 -->
     <div class="product-info-section">
       <div class="product-images">
@@ -204,6 +206,9 @@ export default {
     this.initProductInfo()
   },
   methods: {
+    goBack() {
+      this.$router.back()
+    },
     initProductInfo() {
       this.loading = true
       productApi.infoProduct({ id: this.$route.params.id }).then((res) => {
@@ -291,7 +296,7 @@ export default {
 
 <style scoped lang="less">
 .product-detail-page {
-  padding: 20px;
+  padding: 0 20px 20px 20px;
   max-width: 1200px;
   margin: 0 auto;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;

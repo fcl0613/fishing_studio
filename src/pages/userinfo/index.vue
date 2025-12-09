@@ -193,7 +193,7 @@ export default {
   margin: 0 auto;
 //   padding: 20px;
 //   background-color: #f5f5f5;
-  min-height: 100vh;
+  // min-height: 100vh;
 }
 
 .userinfo-header {

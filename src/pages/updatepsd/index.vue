@@ -134,7 +134,7 @@ export default {
   width: 100%;
   max-width: 880px;
   margin: 0 auto;
-  min-height: 100vh;
+  // min-height: 100vh;
 }
 
 .updatepsd-header {

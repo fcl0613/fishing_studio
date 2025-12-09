@@ -54,6 +54,10 @@ const router = new VueRouter({
             },
           ],
         },
+        {
+          path: 'order/check/cart',
+          component: () => import('@/pages/order/checkCart/index.vue'),
+        }
       ],
     },
     {

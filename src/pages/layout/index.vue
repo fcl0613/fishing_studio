@@ -266,7 +266,7 @@ export default {
   width: 1200px;
   margin: 0 auto; // 水平居中
   padding: 20px 15px;
-  min-height: calc(100vh - 240px); // 自适应高度
+  min-height: calc(100vh - 320px); // 自适应高度
   background-color: #fff;
 }
 

@@ -326,12 +326,19 @@ export default {
       const selectedProducts = this.cartList.filter((item) => this.selectedItems.includes(item.id))
 
       // 保存到localStorage或Vuex，以便在下一页使用
-      localStorage.setItem('checkoutProducts', JSON.stringify(selectedProducts))
+      // localStorage.setItem('checkoutProducts', JSON.stringify(selectedProducts))
 
       // 跳转到结算页面
       console.log('跳转到结算页面:', selectedProducts)
-      this.$message.success('即将前往结算页面')
+      // this.$message.success('即将前往结算页面')
+      const cartIds = selectedProducts.map((item) => item.id)
       // this.$router.push('/checkout')
+      this.$router.push({
+        path: '/layout/order/check/cart',
+        query: {
+          cartIds: JSON.stringify(cartIds)
+        }
+      })
     },
   },
 }
@@ -342,7 +349,7 @@ export default {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  min-height: 100vh;
+  // min-height: 100vh;
 }
 
 .cart-header {
