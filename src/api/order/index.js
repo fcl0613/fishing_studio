@@ -42,4 +42,10 @@ export default {
       data: dto,
     })
   },
+  listenPay(id) {
+    return request({
+      url: '/order/listen/pay/' + id,
+      method: 'post',
+    })
+  }
 }
