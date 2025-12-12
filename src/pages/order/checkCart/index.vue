@@ -119,7 +119,7 @@
     </el-dialog>
 
     <el-dialog title="扫码支付 暂只支持支付宝" :visible.sync="payDialogVisible" width="30%" :before-close="handleClose">
-      <div v-show="qrFlag">
+      <div v-show="qrFlag" style="display: flex; justify-content: center">
         <el-image style="width: 200px; height: 200px" :src="qrUrl" fit="fit"></el-image>
       </div>
     </el-dialog>
@@ -130,6 +130,7 @@
 import orderApi from '@/api/order'
 import { formatPrice } from '@/utils/priceUtil'
 import addressApi from '@/api/address'
+import fsConstant from '@/constant/fsConstant'
 
 export default {
   name: 'OrderCheckCart',
@@ -230,7 +231,7 @@ export default {
         const res = await orderApi.create(orderData)
         this.$message.success('订单提交成功')
         this.orderId = res.data
-        this.qrUrl = 'http://192.168.50.160:8889/yy/web/order/qr/' + res.data
+        this.qrUrl = fsConstant.qrCodeUrl + res.data
         this.payDialogVisible = !this.payDialogVisible
         this.qrFlag = true
         this.verifyPay(res.data)
@@ -253,7 +254,10 @@ export default {
       this.selectedAddress = address
     },
     handleClose() {
-      this.dialogVisible = false
+      this.payDialogVisible = false
+      if (this.timer !== null) {
+        clearInterval(this.timer)
+      }
       // this.$router.push({
       //   path: '/home/userProfiles/orderlist',
       // })

@@ -259,7 +259,14 @@ export default {
         selectedSku: this.product.skuList[this.selectedSkuIndex],
       }
       console.log('立即购买:', orderInfo)
-      this.$message.success('即将跳转到订单确认页面')
+      this.$router.push({
+        path: '/layout/order/check/direct',
+        query: {
+          pid: this.product.id,
+          sid: this.product.skuList[this.selectedSkuIndex].id,
+          pct: this.quantity,
+        },
+      })
     },
     // 加入购物车
     addToCart() {

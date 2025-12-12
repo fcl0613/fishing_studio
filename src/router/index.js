@@ -57,6 +57,10 @@ const router = new VueRouter({
         {
           path: 'order/check/cart',
           component: () => import('@/pages/order/checkCart/index.vue'),
+        },
+        {
+          path: 'order/check/direct',
+          component: () => import('@/pages/order/checkDirect/index.vue'),
         }
       ],
     },
