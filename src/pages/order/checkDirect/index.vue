@@ -150,6 +150,7 @@ export default {
       orderId: null,
       qrFlag: false,
       qrUrl: '',
+      paySuccessMessageLock: false,
     }
   },
   computed: {
@@ -262,23 +263,24 @@ export default {
       if (this.timer !== null) {
         clearInterval(this.timer)
       }
-      // this.$router.push({
-      //   path: '/home/userProfiles/orderlist',
-      // })
+      this.paySuccessMessageLock = false
+      this.$router.push('/layout/personal/order/list')
     },
     verifyPay(id) {
       let that = this
       this.timer = setInterval(() => {
         orderApi.listenPay(id).then(res => {
           if (res.data == 0) {
-            this.$message({
-              type: 'success',
-              onClose: () => {
-                this.payDialogVisible = false
-                // TODO 跳转到订单列表页面
-                this.$router.push('/layout')
-              },
-            })
+            if (!this.paySuccessMessageLock) {
+              this.paySuccessMessageLock = true
+              this.$message({
+                type: 'success',
+                message: '支付成功',
+                onClose: () => {
+                  this.handleClose()
+                },
+              })
+            }
           }
         })
       }, 1000)

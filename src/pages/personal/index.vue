@@ -27,6 +27,10 @@ export default {
             title: '个人中心'
           },
           {
+            index: '/layout/personal/order/list',
+            title: '我的订单'
+          },
+          {
             index: '/layout/personal/updatepsd',
             title: '修改密码'
           },

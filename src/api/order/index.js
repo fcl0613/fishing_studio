@@ -42,6 +42,13 @@ export default {
       data: dto,
     })
   },
+  confirmReceive(dto) {
+    return request({
+      url: '/order/confirm/receive',
+      method: 'post',
+      data: dto,
+    })
+  },
   listenPay(id) {
     return request({
       url: '/order/listen/pay/' + id,
