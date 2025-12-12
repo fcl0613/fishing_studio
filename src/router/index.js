@@ -56,6 +56,10 @@ const router = new VueRouter({
               path: 'order/list',
               component: () => import('@/pages/order/list/index.vue'),
             },
+            {
+              path: 'order/info/:orderId',
+              component: () => import('@/pages/order/info/index.vue'),
+            },
           ],
         },
         {

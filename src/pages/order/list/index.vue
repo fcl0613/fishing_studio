@@ -18,9 +18,9 @@
       </div>
 
       <!-- 订单列表 -->
-      <div class="order-list" v-loading="loading">
+      <div class="order-list" v-loading="loading" element-loading-text="正在加载订单信息...">
         <div v-if="orderList.length > 0" class="order-items">
-          <div v-for="order in orderList" :key="order.id" class="order-item" element-loading-text="正在加载订单信息...">
+          <div v-for="order in orderList" :key="order.id" class="order-item">
             <!-- 订单头部信息 -->
             <div class="order-header">
               <div class="order-info">
@@ -128,6 +128,7 @@ export default {
       qrFlag: false,
       qrUrl: '',
       paySuccessMessageLock: false,
+      payDialogVisible: false
     }
   },
   created() {
@@ -252,8 +253,7 @@ export default {
 
     // 处理查看订单详情
     handleOrderDetail(order) {
-      this.$message.info('订单详情功能开发中...')
-      // 实际项目中这里应该跳转到订单详情页面
+      this.$router.push(`/layout/personal/order/info/${order.id}`)
     },
     handleClose() {
       this.payDialogVisible = false

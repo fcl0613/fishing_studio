@@ -54,5 +54,12 @@ export default {
       url: '/order/listen/pay/' + id,
       method: 'post',
     })
+  },
+  orderInfo(dto) {
+    return request({
+      url: '/order/info',
+      method: 'post',
+      data: dto
+    })
   }
 }
