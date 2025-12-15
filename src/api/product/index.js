@@ -15,4 +15,25 @@ export default {
       data: dto,
     })
   },
+  productCommentCreate(dto) {
+    return request({
+      url: '/product/comment/create',
+      method: 'post',
+      data: dto,
+    })
+  },
+  productCommentQuery(dto) {
+    return request({
+      url: '/product/comment/query',
+      method: 'post',
+      data: dto,
+    })
+  },
+  productCommentRemove(dto) {
+    return request({
+      url: '/product/comment/remove',
+      method: 'post',
+      data: dto,
+    })
+  },
 }

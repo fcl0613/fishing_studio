@@ -1,7 +1,6 @@
 <template>
   <div class="product-detail-page" v-loading="loading">
-    <el-page-header style="margin-bottom: 20px;" @back="goBack">
-</el-page-header>
+    <el-page-header style="margin-bottom: 20px" @back="goBack"> </el-page-header>
     <!-- 商品信息部分 -->
     <div class="product-info-section">
       <div class="product-images">
@@ -16,8 +15,7 @@
             :key="index"
             class="thumbnail-item"
             :class="{ active: index === currentImageIndex }"
-            @mouseenter="switchMainImage(index)"
-          >
+            @mouseenter="switchMainImage(index)">
             <img :src="image" alt="缩略图" class="thumbnail-img" />
           </div>
         </div>
@@ -52,8 +50,7 @@
                 class="sku-option"
                 :class="{ active: selectedSkuIndex === index, disabled: sku.skuStock <= 0 }"
                 @click="selectSku(index)"
-                :disabled="sku.skuStock <= 0"
-              >
+                :disabled="sku.skuStock <= 0">
                 {{ sku.skuName }}
                 <span class="sku-stock" v-if="sku.skuStock <= 0">（缺货）</span>
               </span>
@@ -63,24 +60,9 @@
 
         <div class="operation-section">
           <div class="quantity-control">
-            <button class="quantity-btn" @click="decreaseQuantity" :disabled="quantity <= 1 || currentStock <= 0">
-              -
-            </button>
-            <input
-              type="number"
-              v-model.number="quantity"
-              class="quantity-input"
-              min="1"
-              :max="currentStock"
-              :disabled="currentStock <= 0"
-            />
-            <button
-              class="quantity-btn"
-              @click="increaseQuantity"
-              :disabled="quantity >= currentStock || currentStock <= 0"
-            >
-              +
-            </button>
+            <button class="quantity-btn" @click="decreaseQuantity" :disabled="quantity <= 1 || currentStock <= 0">-</button>
+            <input type="number" v-model.number="quantity" class="quantity-input" min="1" :max="currentStock" :disabled="currentStock <= 0" />
+            <button class="quantity-btn" @click="increaseQuantity" :disabled="quantity >= currentStock || currentStock <= 0">+</button>
           </div>
 
           <div class="action-buttons">
@@ -96,37 +78,30 @@
       <el-tabs v-model="activeTab" class="content-tabs">
         <el-tab-pane label="商品详情" name="details">
           <div class="detail-images">
-            <img
-              v-for="(image, index) in product.productDesc"
-              :key="index"
-              :src="image"
-              alt="商品详情图"
-              class="detail-img"
-            />
+            <img v-for="(image, index) in product.productDesc" :key="index" :src="image" alt="商品详情图" class="detail-img" />
           </div>
         </el-tab-pane>
         <el-tab-pane label="商品评论" name="comments">
-          <div class="comments-section">
+          <div class="comments-section" v-if="productComments.length > 0">
             <div class="comment-item" v-for="(comment, index) in productComments" :key="index">
               <div class="comment-header">
-                <span class="comment-user">{{ comment.user }}</span>
-                <span class="comment-date">{{ comment.date }}</span>
+                <span class="comment-user">{{ comment.loginName }}</span>
+                <span class="comment-date">{{ comment.createTime }}</span>
               </div>
               <div class="comment-rating">
-                <el-rate v-model="comment.rating" disabled show-score score-template="{value}"></el-rate>
+                <el-rate v-model="comment.score" disabled show-score score-template="{value}"></el-rate>
               </div>
-              <div class="comment-content">{{ comment.content }}</div>
-              <div class="comment-images" v-if="comment.images && comment.images.length > 0">
-                <img
-                  v-for="(img, imgIndex) in comment.images"
-                  :key="imgIndex"
-                  :src="img"
-                  alt="评论图片"
-                  class="comment-img"
-                />
+              <div class="comment-content">{{ comment.commentContent }}</div>
+              <div class="comment-images" v-if="comment.commentImg && comment.commentImg.length > 0">
+                <img v-for="(img, imgIndex) in comment.commentImg" :key="imgIndex" :src="img" alt="评论图片" class="comment-img" />
               </div>
             </div>
+            <div class="comment-page">
+              <el-pagination background layout="prev, pager, next" @size-change="handleSizeChange" @current-change="handleCurrentChange" :total="commentTotal">
+            </el-pagination>
+            </div>
           </div>
+          <el-empty v-else description="当前商品暂无评论，快去购买吧"></el-empty>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -159,30 +134,14 @@ export default {
         skuList: [],
       },
       // 商品评论列表
-      productComments: [
-        {
-          user: '钓友小王',
-          date: '2024-01-15',
-          rating: 5,
-          content: '竿子非常轻，手感很好，上鱼时腰力足，回鱼快，性价比很高！',
-          images: ['https://picsum.photos/id/20/200/200', 'https://picsum.photos/id/21/200/200'],
-        },
-        {
-          user: '老钓手',
-          date: '2024-01-10',
-          rating: 4,
-          content: '做工精细，包装精美，调性合适，唯一的小缺点是竿稍有点软，总体来说很满意。',
-          images: [],
-        },
-        {
-          user: '新手入门',
-          date: '2024-01-05',
-          rating: 5,
-          content: '作为新手，这款竿子非常好上手，质量也不错，客服态度很好，推荐新手购买！',
-          images: ['https://picsum.photos/id/22/200/200'],
-        },
-      ],
+      productComments: [],
       loading: false,
+      queryCommentForm: {
+        productId: this.$route.params.id,
+        page: 1,
+        size: 10,
+      },
+      commentTotal: 0,
     }
   },
   computed: {
@@ -204,6 +163,7 @@ export default {
   },
   created() {
     this.initProductInfo()
+    this.initComment()
   },
   methods: {
     goBack() {
@@ -211,13 +171,19 @@ export default {
     },
     initProductInfo() {
       this.loading = true
-      productApi.infoProduct({ id: this.$route.params.id }).then((res) => {
+      productApi.infoProduct({ id: this.$route.params.id }).then(res => {
         this.product = res.data || {}
         // 初始化主图
         this.currentMainImage = this.product.productCover
         // 初始化数量不超过库存
         this.quantity = Math.min(this.quantity, this.currentStock)
         this.loading = false
+      })
+    },
+    initComment() {
+      productApi.productCommentQuery(this.queryCommentForm).then(res => {
+        this.productComments = res.data.list || []
+        this.commentTotal = res.data.total || 0
       })
     },
     // 切换主图
@@ -281,13 +247,21 @@ export default {
         skuId: this.product.skuList[this.selectedSkuIndex].id,
       }
       console.log('加入购物车:', cartItem)
-      cartApi.create(cartItem).then((res) => {
+      cartApi.create(cartItem).then(res => {
         if (res.code === 0) {
           this.$message.success('成功加入购物车')
         } else {
           this.$message.error(res.msg || '加入购物车失败')
         }
       })
+    },
+    handleSizeChange(val) {
+      this.queryCommentForm.size = val
+      this.initComment()
+    },
+    handleCurrentChange(val) {
+      this.queryCommentForm.page = val
+      this.initComment()
     },
   },
   watch: {
@@ -716,6 +690,12 @@ export default {
 
 .comment-img:hover {
   transform: scale(1.05);
+}
+
+.comment-page {
+  display: flex;
+  justify-content: end;
+  margin-bottom: 10px;
 }
 
 /* 响应式设计 */
