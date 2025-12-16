@@ -86,7 +86,10 @@
             <div class="comment-item" v-for="(comment, index) in productComments" :key="index">
               <div class="comment-header">
                 <span class="comment-user">{{ comment.loginName }}</span>
-                <span class="comment-date">{{ comment.createTime }}</span>
+                <div class="comment-actions">
+                  <span class="comment-date">{{ comment.createTime }}</span>
+                  <el-button v-if="comment.userId === 1" type="text" size="small" @click="confirmDeleteComment(comment)">删除</el-button>
+                </div>
               </div>
               <div class="comment-rating">
                 <el-rate v-model="comment.score" disabled show-score score-template="{value}"></el-rate>
@@ -118,6 +121,7 @@
 <script>
 import productApi from '@/api/product'
 import cartApi from '@/api/cart'
+import commentApi from '@/api/comment'
 export default {
   data() {
     return {
@@ -269,6 +273,26 @@ export default {
     handleCurrentChange(val) {
       this.queryCommentForm.page = val
       this.initComment()
+    },
+    // 确认删除评论
+    confirmDeleteComment(comment) {
+      this.$confirm('确定要删除这条评论吗？', '删除评论', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(async () => {
+          try {
+            await commentApi.remove({ id: comment.id })
+            this.$message.success('评论删除成功')
+            this.initComment()
+          } catch (error) {
+            this.$message.error('删除评论失败，请稍后重试')
+          }
+        })
+        .catch(() => {
+          // 用户取消操作
+        })
     },
   },
   watch: {
@@ -583,6 +607,7 @@ export default {
   border: 1px solid #e8e8e8;
   border-radius: 4px;
   overflow: hidden;
+  padding: 0 10px;
 }
 
 .content-tabs .el-tabs__header {
@@ -656,6 +681,12 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
+}
+
+.comment-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .comment-user {

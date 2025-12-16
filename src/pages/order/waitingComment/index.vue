@@ -169,7 +169,7 @@ export default {
 
       try {
         const params = {
-          id: this.currentProduct.orderId,
+          id: this.currentProduct.id,
           productId: this.currentProduct.productId,
           commentContent: this.commentContent,
           commentImg: this.imageFileList.map(file => file.response.data), // 图片URL列表
