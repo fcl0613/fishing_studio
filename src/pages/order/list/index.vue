@@ -68,7 +68,10 @@
               <el-button v-if="order.orderStatus === 0" type="primary" @click="handlePay(order)"> 立即支付 </el-button>
               <el-button v-if="order.orderStatus === 0" type="info" @click="handleCancel(order)"> 取消订单 </el-button>
               <el-button v-if="order.orderStatus === 2" type="success" @click="handleConfirmReceive(order)"> 确认收货 </el-button>
-              <el-button v-if="[1].includes(order.orderStatus)" type="text" @click="handleRefundService(order)"> 退款申请 </el-button>
+              <el-button v-if="[1].includes(order.orderStatus)" type="text" @click="handleRefundService(order)"> 申请退款 </el-button>
+              <el-button v-if="[2, 3].includes(order.orderStatus) && order.issueApplyTag === 0" type="text" @click="handleAfterSales(order)">
+                申请售后
+              </el-button>
               <!-- <el-button v-if="order.orderStatus === 3" type="text" @click="handleRebuy(order)"> 再次购买 </el-button> -->
               <el-button type="text" @click="handleOrderDetail(order)"> 订单详情 </el-button>
             </div>
@@ -96,6 +99,24 @@
     <el-dialog title="扫码支付 暂只支持支付宝" :visible.sync="payDialogVisible" width="30%" :before-close="handleClose">
       <div v-show="qrFlag" style="display: flex; justify-content: center">
         <el-image style="width: 200px; height: 200px" :src="qrUrl" fit="fit"></el-image>
+      </div>
+    </el-dialog>
+
+    <!-- 申请退款/售后对话框 -->
+    <el-dialog title="申请退款/售后" :visible.sync="applyDialogVisible" width="400px" :close-on-click-modal="false" :before-close="handleApplyClose">
+      <el-form :model="applyForm" label-width="80px" size="small">
+        <el-form-item label="申请类型" required>
+          <el-select v-model="applyForm.applyType" placeholder="请选择申请类型" style="width: 100%">
+            <el-option v-for="type in applyTypes" :key="type.value" :label="type.name" :value="type.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="申请原因" required>
+          <el-input v-model="applyForm.applyReason" type="textarea" :rows="4" placeholder="请输入申请原因" maxlength="200" show-word-limit></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="handleApplyClose">取消</el-button>
+        <el-button type="primary" @click="handleSubmitApply" :loading="applyLoading">提交申请</el-button>
       </div>
     </el-dialog>
   </div>
@@ -128,7 +149,19 @@ export default {
       qrFlag: false,
       qrUrl: '',
       paySuccessMessageLock: false,
-      payDialogVisible: false
+      payDialogVisible: false,
+      // 申请退款/售后相关
+      applyDialogVisible: false,
+      applyForm: {
+        applyType: 1, // 默认仅退款
+        applyReason: '',
+        orderId: null,
+      },
+      applyTypes: [
+        { name: '仅退款', value: 1 },
+        { name: '退款退货', value: 2 },
+      ],
+      applyLoading: false,
     }
   },
   created() {
@@ -242,13 +275,70 @@ export default {
 
     // 处理退款申请
     handleRefundService(order) {
-      this.$message.info('退款申请功能开发中...')
+      this.$confirm('确认退款吗？', '确认退款', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'success',
+      })
+        .then(async () => {
+          try {
+            const res = await orderApi.refund({ id: order.id })
+            this.$message.success(res.data)
+            this.getOrderList()
+          } catch (error) {
+            this.$message.error('申请退款失败，请稍后重试')
+          }
+        })
+        .catch(() => {
+          // 用户取消操作
+        })
     },
 
     // 处理再次购买
     handleRebuy(order) {
       this.$message.info('再次购买功能开发中...')
       // 实际项目中这里应该将商品加入购物车
+    },
+
+    // 处理申请售后
+    handleAfterSales(order) {
+      this.openApplyDialog(order)
+    },
+
+    // 打开申请对话框
+    openApplyDialog(order) {
+      this.applyForm = {
+        applyType: 1, // 默认仅退款
+        applyReason: '',
+        orderId: order.id,
+      }
+      this.applyDialogVisible = true
+    },
+
+    // 关闭申请对话框
+    handleApplyClose() {
+      this.applyDialogVisible = false
+    },
+
+    // 提交申请
+    async handleSubmitApply() {
+      if (!this.applyForm.applyReason.trim()) {
+        this.$message.warning('请输入申请原因')
+        return
+      }
+
+      this.applyLoading = true
+      try {
+        await orderApi.afterSalesApply(this.applyForm)
+        this.$message.success('申请提交成功')
+        this.applyDialogVisible = false
+        this.getOrderList() // 刷新订单列表
+      } catch (error) {
+        this.$message.error('申请提交失败，请稍后重试')
+        console.error('申请提交失败:', error)
+      } finally {
+        this.applyLoading = false
+      }
     },
 
     // 处理查看订单详情

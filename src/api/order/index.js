@@ -69,4 +69,39 @@ export default {
       data: dto
     })
   },
+  refund(dto) {
+    return request({
+      url: '/order/refund',
+      method: 'post',
+      data: dto
+    })
+  },
+  afterSalesApply(dto) {
+    return request({
+      url: '/issue/order/apply',
+      method: 'post',
+      data: dto
+    })
+  },
+  afterSalesQuery(dto) {
+    return request({
+      url: '/issue/order/query',
+      method: 'post',
+      data: dto
+    })
+  },
+  afterSalesCancel(dto) {
+    return request({
+      url: '/issue/order/cancel',
+      method: 'post',
+      data: dto
+    })
+  },
+  afterSalesRemove(dto) {
+    return request({
+      url: '/issue/order/remove',
+      method: 'post',
+      data: dto
+    })
+  }
 }
