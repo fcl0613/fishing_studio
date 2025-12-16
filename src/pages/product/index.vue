@@ -97,8 +97,15 @@
               </div>
             </div>
             <div class="comment-page">
-              <el-pagination background layout="prev, pager, next" @size-change="handleSizeChange" @current-change="handleCurrentChange" :total="commentTotal">
-            </el-pagination>
+              <el-pagination
+                background
+                layout="prev, pager, next"
+                :current-page="queryCommentForm.page"
+                :page-size="queryCommentForm.size"
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :total="commentTotal">
+              </el-pagination>
             </div>
           </div>
           <el-empty v-else description="当前商品暂无评论，快去购买吧"></el-empty>

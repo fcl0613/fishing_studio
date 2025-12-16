@@ -68,7 +68,7 @@
               <el-button v-if="order.orderStatus === 0" type="primary" @click="handlePay(order)"> 立即支付 </el-button>
               <el-button v-if="order.orderStatus === 0" type="info" @click="handleCancel(order)"> 取消订单 </el-button>
               <el-button v-if="order.orderStatus === 2" type="success" @click="handleConfirmReceive(order)"> 确认收货 </el-button>
-              <el-button v-if="[1, 2].includes(order.orderStatus)" type="text" @click="handleRefundService(order)"> 退款申请 </el-button>
+              <el-button v-if="[1].includes(order.orderStatus)" type="text" @click="handleRefundService(order)"> 退款申请 </el-button>
               <!-- <el-button v-if="order.orderStatus === 3" type="text" @click="handleRebuy(order)"> 再次购买 </el-button> -->
               <el-button type="text" @click="handleOrderDetail(order)"> 订单详情 </el-button>
             </div>

@@ -61,5 +61,12 @@ export default {
       method: 'post',
       data: dto
     })
-  }
+  },
+  waitingComment(dto) {
+    return request({
+      url: '/order/waiting/comment',
+      method: 'post',
+      data: dto
+    })
+  },
 }

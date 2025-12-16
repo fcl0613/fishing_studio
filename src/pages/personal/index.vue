@@ -31,6 +31,10 @@ export default {
             title: '我的订单'
           },
           {
+            index: '/layout/personal/order/waiting/comment',
+            title: '待评价商品'
+          },
+          {
             index: '/layout/personal/updatepsd',
             title: '修改密码'
           },

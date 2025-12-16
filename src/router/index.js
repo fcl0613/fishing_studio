@@ -60,6 +60,10 @@ const router = new VueRouter({
               path: 'order/info/:orderId',
               component: () => import('@/pages/order/info/index.vue'),
             },
+            {
+              path: 'order/waiting/comment',
+              component: () => import('@/pages/order/waitingComment/index.vue'),
+            }
           ],
         },
         {
