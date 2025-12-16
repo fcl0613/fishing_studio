@@ -31,6 +31,10 @@ export default {
             title: '我的订单'
           },
           {
+            index: '/layout/personal/order/afterSales',
+            title: '退款售后'
+          },
+          {
             index: '/layout/personal/order/waiting/comment',
             title: '待评价商品'
           },

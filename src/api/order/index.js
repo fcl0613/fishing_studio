@@ -103,5 +103,12 @@ export default {
       method: 'post',
       data: dto
     })
+  },
+  afterSalesInfo(dto) {
+    return request({
+      url: '/issue/order/info',
+      method: 'post',
+      data: dto
+    })
   }
 }

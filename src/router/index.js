@@ -63,7 +63,11 @@ const router = new VueRouter({
             {
               path: 'order/waiting/comment',
               component: () => import('@/pages/order/waitingComment/index.vue'),
-            }
+            },
+            {
+              path: 'order/afterSales',
+              component: () => import('@/pages/order/afterSales/index.vue'),
+            },
           ],
         },
         {
