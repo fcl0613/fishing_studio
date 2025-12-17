@@ -50,10 +50,9 @@ export default {
     },
     // 跳转到帖子列表页面
     goToPostList(topicId) {
-      // 这里只写出方法，具体实现等帖子列表页面完成后做修改
       console.log('跳转到帖子列表页面，主题ID:', topicId)
-      // 示例跳转代码（需要根据实际路由配置调整）
-      // this.$router.push({ path: '/postList', query: { topicId: topicId } })
+      // 跳转到帖子列表页面
+      this.$router.push({ path: '/postLayout/post', query: { topicId: topicId } })
     }
   },
 }

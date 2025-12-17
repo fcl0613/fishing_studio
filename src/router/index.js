@@ -89,6 +89,10 @@ const router = new VueRouter({
           path: 'topic',
           component: () => import('@/pages/postTopic/index.vue'),
         },
+        {
+          path: 'post',
+          component: () => import('@/pages/postList/index.vue'),
+        },
       ]
     },
     {
