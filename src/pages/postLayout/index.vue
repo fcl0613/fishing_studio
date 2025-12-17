@@ -8,41 +8,18 @@
         <span v-if="!$store.getters.getToken" @click="$router.push('/login')">欢迎注册</span>
         <span v-if="$store.getters.getToken" @click="$router.push('/layout/personal')">会员中心</span>
         <span v-if="$store.getters.getToken" class="separator">|</span>
-        <span v-if="$store.getters.getToken" @click="$router.push('/postLayout/topic')">论坛中心</span>
+        <span v-if="$store.getters.getToken" @click="$router.push('/layout/home')">渔具商城</span>
       </div>
     </div>
 
     <!-- 头部LOGO和搜索区 -->
     <div class="header">
       <div class="header-content">
-        <h1 class="logo" @click="$router.push({ path: '/layout/home' }, () => {})">钓鱼佬商城</h1>
+        <h1 class="logo" @click="$router.push({ path: '/postLayout/topic' }, () => {})">钓鱼佬论坛</h1>
         <div class="search-box">
-          <el-input v-model="searchText" placeholder="搜索商品..." class="search-input"></el-input>
+          <el-input v-model="searchText" placeholder="搜索帖子..." class="search-input"></el-input>
           <el-button type="primary" @click="handleSearch">搜索</el-button>
         </div>
-        <el-button icon="el-icon-shopping-cart" @click="$router.push('/layout/cart')" class="cart-btn">
-          购物车
-        </el-button>
-      </div>
-    </div>
-
-    <!-- 分类菜单 -->
-    <div class="category-menu">
-      <div class="category-content">
-        <span :class="{ active: activeCategory === 'homePage' }" @click="changeCategory('homePage', 0)">
-          商城首页
-        </span>
-        <span :class="{ active: activeCategory === 'all' }" @click="changeCategory('all', 0)"> 全部商品 </span>
-        <!-- <span
-          v-for="item in categoryList"
-          :key="item.id"
-          :class="{ active: activeCategory === item.categoryName }"
-          @click="changeCategory(item.categoryName, item.id)"
-        >
-          {{ item.categoryName }}
-        </span> -->
-        <!-- <span :class="{ active: activeCategory === 'platform' }" @click="changeCategory('platform')"> 台钓 </span> -->
-        <!-- <span :class="{ active: activeCategory === 'brand' }" @click="changeCategory('brand', 0)"> 品牌 </span> -->
       </div>
     </div>
 
@@ -65,26 +42,14 @@
 </template>
 
 <script>
-import frontAPI from '@/api/front'
 import { EventBus } from '@/utils/event-bus'
 export default {
   data() {
     return {
       searchText: '',
-      activeCategory: '', // 当前激活的分类
-      categoryList: [],
     }
   },
   watch: {
-    $route(to, _from) {
-      if (to.path === '/layout/home') {
-        this.activeCategory = 'homePage'
-      } else if (to.path === '/layout/search') {
-        this.activeCategory = 'all'
-      } else {
-        this.activeCategory = ''
-      }
-    },
   },
   mounted() {
     // 监听搜索事件
@@ -95,19 +60,8 @@ export default {
   created() {
     // 初始化用户信息
     this.$store.dispatch('getUserInfo')
-    this.initCategory()
-    this.initActiveCategory()
   },
   methods: {
-    initActiveCategory() {
-      if (this.$route.path === '/layout/home') {
-        this.activeCategory = 'homePage'
-      } else if (this.$route.path === '/layout/search') {
-        this.activeCategory = 'all'
-      } else {
-        this.activeCategory = ''
-      }
-    },
     handleSearch() {
       if (this.searchText) {
         if (this.$route.path === '/layout/search') {
@@ -120,41 +74,6 @@ export default {
         })
         this.activeCategory = 'all'
       }
-    },
-    changeCategory(category, categoryId) {
-      this.activeCategory = category
-      this.searchText = ''
-      if (category === 'homePage') {
-        if (this.$route.path !== '/layout/home') {
-          this.$router.push({ path: '/layout/home' })
-          return
-        } else {
-          return
-        }
-      }
-      if (category === 'all') {
-        // TODO 路由跳转到商品搜索页面 参数 catq=all catId=0
-        this.$router.push({
-          path: '/layout/search',
-          query: { catq: 'all', catId: 0 },
-        })
-      } else if (category === 'brand') {
-        // TODO 路由跳转到商品搜索页面 参数 catq=brand catId=0
-        this.$router.push({
-          path: '/layout/search',
-          query: { catq: 'brand', catId: 0 },
-        })
-      } else {
-        // TODO 路由跳转到商品搜索页面 参数 catq=ot catId=父级分类id
-        this.$router.push({
-          path: '/layout/search',
-          query: { catq: 'ot', catId: categoryId },
-        })
-      }
-    },
-    async initCategory() {
-      const res = await frontAPI.category()
-      this.categoryList = res.data
     },
   },
   beforeDestroy() {
@@ -203,7 +122,7 @@ export default {
   .header-content {
     width: 1200px;
     margin: 0 auto; // 水平居中
-    padding: 20px 15px;
+    padding: 10px 15px;
     display: flex;
     align-items: center;
     justify-content: space-between; // 三部分均匀分布

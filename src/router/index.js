@@ -81,6 +81,17 @@ const router = new VueRouter({
       ],
     },
     {
+      path: '/postLayout',
+      component: () => import('@/pages/postLayout/index.vue'),
+      redirect: '/postLayout/topic',
+      children: [
+        {
+          path: 'topic',
+          component: () => import('@/pages/postTopic/index.vue'),
+        },
+      ]
+    },
+    {
       path: '/404',
       component: () => import('@/pages/404/index.vue'),
     },
