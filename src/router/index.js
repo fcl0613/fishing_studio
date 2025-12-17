@@ -93,6 +93,10 @@ const router = new VueRouter({
           path: 'post',
           component: () => import('@/pages/postList/index.vue'),
         },
+        {
+          path: 'post/edit',
+          component: () => import('@/pages/postEdit/index.vue'),
+        },
       ]
     },
     {

@@ -15,17 +15,21 @@
     <div class="right-content">
       <!-- 头部：当前主题信息 -->
       <div class="content-header">
-        <div class="topic-info">
-          <div class="topic-name">{{ selectedTopicName }}</div>
-          <div class="topic-post-count">共 {{ totalPosts }} 个帖子</div>
+        <div class="header-left">
+          <div class="topic-info">
+            <div class="topic-name">{{ selectedTopicName }}</div>
+            <div class="topic-post-count">共 {{ totalPosts }} 个帖子</div>
+          </div>
         </div>
-        <el-button type="primary" @click="goToPostEdit">发帖</el-button>
+        <div class="header-right">
+          <el-button type="primary" @click="goToPostEdit">发帖</el-button>
+        </div>
       </div>
 
       <!-- 帖子列表 -->
       <div class="post-list">
-        <div v-for="post in postList" :key="post.id" class="post-item" @click="viewPostDetail(post.id)">
-          <div class="post-title">
+        <div v-for="post in postList" :key="post.id" class="post-item">
+          <div class="post-title" @click="viewPostDetail(post.id)">
             <span v-if="post.topStatus === 1" class="top-tag">精</span>
             {{ post.postTitle }}
           </div>
@@ -35,9 +39,14 @@
             <span class="like-count"> <i class="el-icon-thumb"></i> {{ post.postLike }} </span>
             <span class="comment-count"> <i class="el-icon-chat-dot-round"></i> {{ post.commentCount }} </span>
           </div>
-          <div class="post-last-update">
-            <span class="last-reply">最后回复：{{ post.lastLoginName }}</span>
-            <span class="last-time">{{ formatTime(post.lastTime) }}</span>
+          <div class="">
+            <div v-show="post.lastLoginName !== null && post.lastLoginName !== ''">
+              <span class="last-reply">最后回复：{{ post.lastLoginName }}</span>
+              <span class="last-time">{{ formatTime(post.lastTime) }}</span>
+            </div>
+            <div class="post-actions">
+              <el-button size="small" type="text" @click="viewPostDetail(post.id)">查看</el-button>
+            </div>
           </div>
         </div>
       </div>
@@ -68,7 +77,7 @@ export default {
       topicList: [],
       selectedTopicId: null,
       selectedTopicName: '',
-
+      postTitle: this.$route.query.postTitle || '',
       // 帖子相关
       postList: [],
       currentPage: 1,
@@ -123,6 +132,7 @@ export default {
       }
       // 重置分页并加载帖子
       this.currentPage = 1
+      this.postTitle = ''
       this.loadPostList()
     },
 
@@ -131,13 +141,14 @@ export default {
       if (!this.selectedTopicId) return
 
       const params = {
-        topicId: this.selectedTopicId,
-        pageNum: this.currentPage,
-        pageSize: this.pageSize,
+        postCategory: this.selectedTopicId,
+        postTitle: this.postTitle,
+        page: this.currentPage,
+        size: this.pageSize,
       }
 
       postApi
-        .postQuery(params)
+        .postSearch(params)
         .then(res => {
           this.postList = res.data?.list || []
           this.totalPosts = res.data?.total || 0
@@ -165,8 +176,7 @@ export default {
     // 跳转到发帖页面
     goToPostEdit() {
       console.log('跳转到发帖页面')
-      // 示例跳转代码（需要根据实际路由配置调整）
-      // this.$router.push({ path: '/postEdit', query: { topicId: this.selectedTopicId } })
+      this.$router.push('/postLayout/post/edit')
     },
 
     // 分页相关方法
@@ -273,7 +283,7 @@ export default {
     .post-item {
       padding: 16px 20px;
       border-bottom: 1px solid #f0f0f0;
-      cursor: pointer;
+
       transition: background-color 0.3s;
 
       &:last-child {
@@ -289,7 +299,7 @@ export default {
         font-weight: 500;
         margin-bottom: 8px;
         color: #333;
-
+        cursor: pointer;
         .top-tag {
           display: inline-block;
           background-color: #ff4d4f;
@@ -323,9 +333,17 @@ export default {
       .post-last-update {
         font-size: 12px;
         color: #999;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
 
         span {
           margin-right: 16px;
+        }
+
+        .post-actions {
+          display: flex;
+          gap: 8px;
         }
       }
     }
