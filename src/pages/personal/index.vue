@@ -39,6 +39,10 @@ export default {
             title: '待评价商品'
           },
           {
+            index: '/layout/personal/post/list',
+            title: '我的文章'
+          },
+          {
             index: '/layout/personal/updatepsd',
             title: '修改密码'
           },

@@ -42,6 +42,7 @@
           <div class="">
             <div v-show="post.lastLoginName !== null && post.lastLoginName !== ''">
               <span class="last-reply">最后回复：{{ post.lastLoginName }}</span>
+              &nbsp;&nbsp;
               <span class="last-time">{{ formatTime(post.lastTime) }}</span>
             </div>
             <div class="post-actions">
@@ -166,7 +167,8 @@ export default {
     // 查看帖子详情
     viewPostDetail(postId) {
       console.log('查看帖子详情，帖子ID:', postId)
-      this.$router.push({ path: '/postLayout/post/info', query: { postId: postId } })
+      // 在新标签页中打开帖子详情
+      window.open(`#/postLayout/post/info?postId=${postId}`, '_blank')
     },
 
     // 跳转到发帖页面

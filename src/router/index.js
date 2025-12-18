@@ -68,6 +68,10 @@ const router = new VueRouter({
               path: 'order/afterSales',
               component: () => import('@/pages/order/afterSales/index.vue'),
             },
+            {
+              path: 'post/list',
+              component: () => import('@/pages/myPost/index.vue'),
+            }
           ],
         },
         {

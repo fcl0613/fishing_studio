@@ -60,6 +60,7 @@
         <el-form-item>
           <el-button @click="resetForm">重置</el-button>
           <el-button type="primary" @click="submitForm">提交</el-button>
+          <el-button type="primary" @click="goBack">返回</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -223,6 +224,10 @@ export default {
           }
         }
       })
+    },
+    // 返回帖子列表页面
+    goBack() {
+      this.$router.go(-1)
     }
   }
 }
