@@ -86,14 +86,11 @@ export default {
     }
   },
   created() {
-    this.loadTopicList()
     const topicId = this.$route.query.topicId
     if (topicId) {
-      // 如果有topicId参数，延迟选择主题，确保主题列表已经加载完成
-      setTimeout(() => {
-        this.selectTopic(parseInt(topicId))
-      }, 100)
+      this.selectTopic(parseInt(topicId))
     }
+    this.loadTopicList()
   },
   mounted() {
     // 检查URL参数中是否有topicId
@@ -169,8 +166,7 @@ export default {
     // 查看帖子详情
     viewPostDetail(postId) {
       console.log('查看帖子详情，帖子ID:', postId)
-      // 示例跳转代码（需要根据实际路由配置调整）
-      // this.$router.push({ path: '/postDetail', query: { postId: postId } })
+      this.$router.push({ path: '/postLayout/post/info', query: { postId: postId } })
     },
 
     // 跳转到发帖页面

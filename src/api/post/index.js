@@ -35,9 +35,9 @@ export default {
       data,
     })
   },
-  postDelete(data) {
+  postDetail(data) {
     return request({
-      url: '/post/delete',
+      url: '/post/detail',
       method: 'post',
       data,
     })

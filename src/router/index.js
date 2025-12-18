@@ -97,6 +97,10 @@ const router = new VueRouter({
           path: 'post/edit',
           component: () => import('@/pages/postEdit/index.vue'),
         },
+        {
+          path: 'post/info',
+          component: () => import('@/pages/postInfo/index.vue'),
+        },
       ]
     },
     {
